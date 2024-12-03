@@ -51,8 +51,31 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
+const AvaliacaoProdutoAdd = React.lazy(() => import('./views/avaliacaoProduto/avaliacaoProdutoAdd'))
+const AvaliacaoProdutoList = React.lazy(() => import('./views/avaliacaoProduto/avaliacaoProdutoList'))
+const CartaoAdd = React.lazy(() => import('./views/cartao/cartaoAdd'))
+const CartaoList = React.lazy(() => import('./views/cartao/cartaoList'))
+const CategoriaAdd = React.lazy(() => import('./views/categoria/categoriaAdd'))
+const CategoriaList = React.lazy(() => import('./views/categoria/categoriaList'))
+const ClienteAdd = React.lazy(() => import('./views/cliente/ClienteAdd'))
+const ClienteList = React.lazy(() => import('./views/cliente/ClienteList'))
+const EnderecoAdd = React.lazy(() => import('./views/endereco/endrecoAdd'))
+const EnderecoList = React.lazy(() => import('./views/endereco/enderecoList'))
+const EntregaAdd = React.lazy(() => import('./views/entrega/entregaAdd'))
+const EntregaList = React.lazy(() => import('./views/entrega/entregaList'))
+const EstoqueAdd = React.lazy(() => import('./views/estoque/estoqueAdd'))
+const EstoqueList = React.lazy(() => import('./views/estoque/estoqueList'))
+const HistoricoEntregaAdd = React.lazy(() => import('./views/historicoEntrega/historicoEntregaAdd'))
+const HistoricoEntregaList = React.lazy(() => import('./views/historicoEntrega/historicoEntregaList'))
+const ClienteAdd = React.lazy(() => import('./views/cliente/ClienteAdd'))
+const ClienteList = React.lazy(() => import('./views/cliente/ClienteList'))
+
 const UsuarioList = React.lazy(() => import('./views/usuario/usuarioList'))
 const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
+
+
+
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
