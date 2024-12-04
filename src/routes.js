@@ -96,7 +96,7 @@ const routes = [
   { path: '/avaliacaoProduto/list', name: 'Avaliação Produto List', element: AvaliacaoProdutoList },
   { path: '/avaliacaoProduto/add', name: 'Usuário Produto Add', element: AvaliacaoProdutoAdd },
   { path: '/cartao/list', name: 'Cartão List', element: CartaoList },
-  { path: '/cartao/add', name: 'Cartão Add', element: CartaoList },
+  { path: '/cartao/add', name: 'Cartão Add', element: CartaoAdd },
   { path: '/categoria/list', name: 'Categoria List', element: CategoriaList },
   { path: '/categoria/add', name: 'Categoria Add', element: CategoriaAdd },
   { path: '/cliente/list', name: 'Cliente List', element: ClienteList },
