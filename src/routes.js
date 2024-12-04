@@ -67,11 +67,24 @@ const EstoqueAdd = React.lazy(() => import('./views/estoque/estoqueAdd'))
 const EstoqueList = React.lazy(() => import('./views/estoque/estoqueList'))
 const HistoricoEntregaAdd = React.lazy(() => import('./views/historicoEntrega/historicoEntregaAdd'))
 const HistoricoEntregaList = React.lazy(() => import('./views/historicoEntrega/historicoEntregaList'))
-const ClienteAdd = React.lazy(() => import('./views/cliente/ClienteAdd'))
-const ClienteList = React.lazy(() => import('./views/cliente/ClienteList'))
-
+const ImagemProdutoAdd = React.lazy(() => import('./views/imagemProduto/imagemProdutoAdd'))
+const ImagemProdutoList = React.lazy(() => import('./views/imagemProduto/imagemProdutoList'))
+const ItemVendaAdd = React.lazy(() => import('./views/itemVenda/itemVendaAdd'))
+const ItemVendaList = React.lazy(() => import('./views/itemVenda/itemVendaList'))
+const PermissaoAdd = React.lazy(() => import('./views/permissao/permissaoAdd'))
+const PermissaoList = React.lazy(() => import('./views/permissao/permissaoList'))
+const ProdutoAdd = React.lazy(() => import('./views/produto/produtoAdd'))
+const ProdutoList = React.lazy(() => import('./views/produto/produtoList'))
+const ProdutoEstoqueAdd = React.lazy(() => import('./views/produtoEstoque/produtoEstoqueAdd'))
+const ProdutoEstoqueList = React.lazy(() => import('./views/produtoEstoque/produtoEstoqueList'))
+const ProdutoFornecedorAdd = React.lazy(() => import('./views/produtoFornecedor/produtoFornecedorAdd'))
+const ProdutoFornecedorList = React.lazy(() => import('./views/produtoFornecedor/produtoFornecedorList'))
+const TransportadoraAdd = React.lazy(() => import('./views/transportadora/transportadoraAdd'))
+const TranspostadoraList = React.lazy(() => import('./views/transportadora/transportadoraList'))
 const UsuarioList = React.lazy(() => import('./views/usuario/usuarioList'))
 const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
+const vendaAdd = React.lazy(() => import('./views/venda/vendaAdd'))
+const VendaList = React.lazy(() => import('./views/venda/vendaList'))
 
 
 
@@ -80,8 +93,40 @@ const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/avaliacaoProduto/list', name: 'Avaliação Produto List', element: AvaliacaoProdutoList },
+  { path: '/avaliacaoProduto/add', name: 'Usuário Produto Add', element: AvaliacaoProdutoAdd },
+  { path: '/cartao/list', name: 'Cartão List', element: CartaoList },
+  { path: '/cartao/add', name: 'Cartão Add', element: CartaoList },
+  { path: '/categoria/list', name: 'Categoria List', element: CategoriaList },
+  { path: '/categoria/add', name: 'Categoria Add', element: CategoriaAdd },
+  { path: '/cliente/list', name: 'Cliente List', element: ClienteList },
+  { path: '/cliente/add', name: 'Cliente Add', element: ClienteAdd },
+  { path: '/endereco/list', name: 'Endereço List', element: EnderecoList },
+  { path: '/endereco/add', name: 'Endreço Add', element: EnderecoAdd },
+  { path: '/entrega/list', name: 'Entrega List', element: EntregaList },
+  { path: '/entrega/add', name: 'Entrega Add', element: EntregaAdd },
+  { path: '/estoque/list', name: 'Estoque List', element: EstoqueList },
+  { path: '/estoque/add', name: 'Estoque Add', element: EstoqueAdd },
+  { path: '/historicoEntrega/list', name: 'Historico Entrega List', element: HistoricoEntregaList },
+  { path: '/historicoEntrega/add', name: 'Hitorico Entrega Add', element: HistoricoEntregaAdd },
+  { path: '/imagemProduto/list', name: 'Imagem Produto List', element: ImagemProdutoList },
+  { path: '/imagemProduto/add', name: 'Imagem Produto Add', element: ImagemProdutoAdd },
+  { path: '/itemVenda/list', name: 'Item Venda List', element: ItemVendaList },
+  { path: '/itemVenda/add', name: 'Item Venda Add', element: ItemVendaAdd },
+  { path: '/permissao/list', name: 'Permissão List', element: PermissaoList},
+  { path: '/permissao/add', name: 'Permissão Add', element: PermissaoAdd },
+  { path: '/produto/list', name: 'Produto List', element: ProdutoList },
+  { path: '/produto/add', name: 'Produto Add', element: ProdutoAdd },
+  { path: '/produtoEstoque/list', name: 'Produto Estoque List', element: ProdutoEstoqueList },
+  { path: '/produtoEstoque/add', name: 'Produto Estoque Add', element: ProdutoEstoqueAdd },
+  { path: '/produtoFornecedor/list', name: 'Produto Fornecedor List', element: ProdutoFornecedorList },
+  { path: '/produtoFornecedor/add', name: 'Produto Fornecedor Add', element: ProdutoFornecedorAdd },
+  { path: '/transportadora/list', name: 'Transportadora List', element: TranspostadoraList },
+  { path: '/transportadora/add', name: 'Transportadora Add', element: TransportadoraAdd },
   { path: '/usuario/list', name: 'Usuário List', element: UsuarioList },
   { path: '/usuario/add', name: 'Usuário Add', element: UsuarioAdd },
+  { path: '/venda/list', name: 'Venda List', element: VendaList },
+  { path: '/venda/add', name: 'Venda Add', element: vendaAdd },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
