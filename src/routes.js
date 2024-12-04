@@ -83,7 +83,7 @@ const TransportadoraAdd = React.lazy(() => import('./views/transportadora/transp
 const TranspostadoraList = React.lazy(() => import('./views/transportadora/transportadoraList'))
 const UsuarioList = React.lazy(() => import('./views/usuario/usuarioList'))
 const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
-const vendaAdd = React.lazy(() => import('./views/venda/vendaAdd'))
+const VendaAdd = React.lazy(() => import('./views/venda/vendaAdd'))
 const VendaList = React.lazy(() => import('./views/venda/vendaList'))
 
 
@@ -126,7 +126,7 @@ const routes = [
   { path: '/usuario/list', name: 'Usuário List', element: UsuarioList },
   { path: '/usuario/add', name: 'Usuário Add', element: UsuarioAdd },
   { path: '/venda/list', name: 'Venda List', element: VendaList },
-  { path: '/venda/add', name: 'Venda Add', element: vendaAdd },
+  { path: '/venda/add', name: 'Venda Add', element: VendaAdd },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
