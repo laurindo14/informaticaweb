@@ -239,6 +239,24 @@ const _nav = [
   },
   {
     component: CNavGroup,
+    name: 'Vendedor',
+    to: '/vendedor',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/vendedor/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/vendedor/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Forms',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [

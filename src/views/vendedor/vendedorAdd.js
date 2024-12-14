@@ -15,10 +15,9 @@ import {
 import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
-const UsuarioAdd = () => {
+const vendedorAdd = () => {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
-  const [rg, setRg] = useState('');
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [email, setEmail] = useState('');
@@ -27,36 +26,34 @@ const UsuarioAdd = () => {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const usuarioId = searchParams.get('id');
+  const vendedorId = searchParams.get('id');
 
   useEffect(() => {
-    if (usuarioId) {
-      const fetchUsuario = async () => {
+    if (vendedorId) {
+      const fetchvendedor = async () => {
         try {
-          const response = await api.get(`/usuario/${usuarioId}`);
-          const { nome, cpf, rg, login, senha, email, telefone } = response.data;
+          const response = await api.get(`/vendedor/${vendedorId}`);
+          const { nome, cpf, login, senha, email, telefone } = response.data;
           setNome(nome);
           setCpf(cpf);
-          setRg(rg);
           setLogin(login);
           setSenha(senha);
           setEmail(email);
           setTelefone(telefone);
         } catch (error) {
-          console.error("Erro ao carregar usuario:", error);
+          console.error("Erro ao carregar vendedor:", error);
         }
       };
-      fetchUsuario();
+      fetchvendedor();
     }
-  }, [usuarioId]);
+  }, [vendedorId]);
 
   const handleSave = async (e) => {
     e.preventDefault();
 
-    const usuarioData = {
+    const vendedorData = {
       nome,
       cpf,
-      rg,
       login,
       senha,
       email,
@@ -64,23 +61,22 @@ const UsuarioAdd = () => {
     };
 
     try {
-      if (usuarioId) {
-        await api.put(`/usuario/${usuarioId}`, usuarioData);
+      if (vendedorId) {
+        await api.put(`/vendedor/${vendedorId}`, vendedorData);
       } else {
-        await api.post('/usuario', usuarioData);
+        await api.post('/vendedor', vendedorData);
       }
       setModalVisible(true);
       resetForm();
     } catch (error) {
-      console.error("Erro ao salvar o usuario:", error);
-      alert('Erro ao salvar o usuario');
+      console.error("Erro ao salvar o vendedor:", error);
+      alert('Erro ao salvar o vendedor');
     }
   };
 
   const resetForm = () => {
     setNome('');
     setCpf('');
-    setRg('');
     setLogin('');
     setSenha('');
     setEmail('');
@@ -91,72 +87,52 @@ const UsuarioAdd = () => {
     <>
       <CCard>
         <CCardBody>
-          <h4>{usuarioId ? 'Editar Usuario' : 'Adicionar Usuario'}</h4>
+          <h4>{vendedorId ? 'Editar vendedor' : 'Adicionar vendedor'}</h4>
           <CForm onSubmit={handleSave}>
             <div className="mb-3">
-              <CFormLabel htmlFor="nomeUsuario">Nome do Usuario</CFormLabel>
+              <CFormLabel htmlFor="nomevendedor">Nome do vendedor</CFormLabel>
               <CFormInput
                 type="text"
-                id="nomeUsuario"
+                id="nomevendedor"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="cpfUsuario">Cpf</CFormLabel>
+              <CFormLabel htmlFor="cpfvendedor">Cpf</CFormLabel>
               <CFormInput
                 type="text"
-                id="cpfUsuario"
+                id="cpfvendedor"
                 value={cpf}
                 onChange={(e) => setCpf(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="rgUsuario">Rg</CFormLabel>
+              <CFormLabel htmlFor="emailvendedor">Email</CFormLabel>
               <CFormInput
-                type="text"
-                id="rgUsuario"
-                value={rg}
-                onChange={(e) => setRg(e.target.value)}
+                type="email"
+                id="emailvendedor"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="loginUsuario">Login</CFormLabel>
-              <CFormInput
-                type="text"
-                id="loginUsuario"
-                value={login}
-                onChange={(e) => setLogin(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="senhaUsuario">Senha</CFormLabel>
+              <CFormLabel htmlFor="senhavendedor">Senha</CFormLabel>
               <CFormInput
                 type="password"
-                id="senhaUsuario"
+                id="senhavendedor"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="emailUsuario">Email</CFormLabel>
-              <CFormInput
-                type="email"
-                id="emailUsuario"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="telefoneUsuario">Telefone</CFormLabel>
+              <CFormLabel htmlFor="telefonevendedor">Telefone</CFormLabel>
               <CFormInput
                 type="tel"
-                id="telefoneUsuario"
+                id="telefonevendedor"
                 value={telefone}
                 onChange={(e) => setTelefone(e.target.value)}
                 required
@@ -172,7 +148,7 @@ const UsuarioAdd = () => {
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>
         </CModalHeader>
-        <CModalBody>Usuario salvo com sucesso!</CModalBody>
+        <CModalBody>vendedor salvo com sucesso!</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={() => setModalVisible(false)}>
             Fechar
@@ -183,4 +159,4 @@ const UsuarioAdd = () => {
   );
 };
 
-export default UsuarioAdd;
+export default vendedorAdd;

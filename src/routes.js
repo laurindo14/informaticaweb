@@ -53,12 +53,16 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const UsuarioList = React.lazy(() => import('./views/usuario/usuarioList'))
 const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
+const VendedorList = React.lazy(() => import('./views/vendedor/vendedorList'))
+const VendedorAdd = React.lazy(() => import('./views/vendedor/vendedorAdd'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/usuario/list', name: 'Usuário List', element: UsuarioList },
   { path: '/usuario/add', name: 'Usuário Add', element: UsuarioAdd },
+  { path: '/vendedor/add', name: 'Vendedor Add', element: VendedorAdd },
+  { path: '/vendedor/list', name: 'Vendedor List', element: VendedorList },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
