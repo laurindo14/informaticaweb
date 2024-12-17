@@ -23,49 +23,49 @@ import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
 
-const VendedorList = () => {
-  const [vendedores, setVendedores] = useState([]);
+const CartaoList = () => {
+  const [cartoes, setCartoes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [vendedorSelecionado, setVendedorSelecionado] = useState(null);
+  const [cartaoSelecionado, setCartaoSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchVendedores = async () => {
+  const fetchCartoes = async () => {
     try {
-      const response = await api.get('/vendedor');
+      const response = await api.get('/cartao'); // Rota de busca de cartões
       const data = Array.isArray(response.data) ? response.data : [];
-      setVendedores(data);
+      setCartoes(data);
     } catch (error) {
-      console.error('Erro ao buscar vendedores:', error);
-      setVendedores([]);
+      console.error('Erro ao buscar cartões:', error);
+      setCartoes([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchVendedores();
+    fetchCartoes();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/vendedor/add?id=${id}`);
+    navigate(`/cartao/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (vendedor) => {
-    setVendedorSelecionado(vendedor);
+  const handleConfirmDelete = (cartao) => {
+    setCartaoSelecionado(cartao);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (vendedorSelecionado) {
+    if (cartaoSelecionado) {
       try {
-        await api.delete(`/vendedor/${vendedorSelecionado.id}`);
+        await api.delete(`/cartao/${cartaoSelecionado.id}`);
         setModalVisible(false);
-        setVendedorSelecionado(null);
-        fetchVendedores(); // Atualiza a lista após exclusão
+        setCartaoSelecionado(null);
+        fetchCartoes(); // Atualiza a lista após exclusão
       } catch (error) {
-        console.error('Erro ao remover vendedor:', error);
+        console.error('Erro ao remover cartão:', error);
       }
     }
   };
@@ -79,36 +79,34 @@ const VendedorList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Vendedores</strong>
+            <strong>Lista de Cartões</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">CPF</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">E-mail</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Login</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">RG</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Telefone</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Número do Cartão</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Validade</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Cliente ID</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">CVC</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {vendedores.map((vendedor) => (
-                  <CTableRow key={vendedor.id}>
-                    <CTableHeaderCell scope="row">{vendedor.id}</CTableHeaderCell>
-                    <CTableDataCell>{vendedor.cpf}</CTableDataCell>
-                    <CTableDataCell>{vendedor.email}</CTableDataCell>
-                    <CTableDataCell>{vendedor.login}</CTableDataCell>
-                    <CTableDataCell>{vendedor.nome}</CTableDataCell>
-                    <CTableDataCell>{vendedor.rg}</CTableDataCell>
-                    <CTableDataCell>{vendedor.telefone}</CTableDataCell>
+                {cartoes.map((cartao) => (
+                  <CTableRow key={cartao.id}>
+                    <CTableHeaderCell scope="row">{cartao.id}</CTableHeaderCell>
+                    <CTableDataCell>{cartao.nome}</CTableDataCell>
+                    <CTableDataCell>{cartao.numeroCartao}</CTableDataCell>
+                    <CTableDataCell>{cartao.validade}</CTableDataCell>
+                    <CTableDataCell>{cartao.cliente_id}</CTableDataCell>
+                    <CTableDataCell>{cartao.cvc}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(vendedor.id)}
+                        onClick={() => handleEdit(cartao.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -116,7 +114,7 @@ const VendedorList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(vendedor)}
+                        onClick={() => handleConfirmDelete(cartao)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -136,7 +134,7 @@ const VendedorList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o vendedor "<strong>{vendedorSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o cartão "<strong>{cartaoSelecionado?.nome}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -151,4 +149,4 @@ const VendedorList = () => {
   );
 };
 
-export default VendedorList;
+export default CartaoList;

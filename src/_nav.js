@@ -239,6 +239,60 @@ const _nav = [
   },
   {
     component: CNavGroup,
+    name: 'Cartão',
+    to: '/cartao',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/cartao/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/cartao/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Entrega',
+    to: '/entrega',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/entrega/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/entrega/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Produto',
+    to: '/produto',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/produto/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/produto/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Vendedor',
     to: '/vendedor',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,

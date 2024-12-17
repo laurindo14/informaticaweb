@@ -15,7 +15,7 @@ import {
 import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
-const vendedorAdd = () => {
+const VendedorAdd = () => {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [login, setLogin] = useState('');
@@ -30,7 +30,7 @@ const vendedorAdd = () => {
 
   useEffect(() => {
     if (vendedorId) {
-      const fetchvendedor = async () => {
+      const fetchVendedor = async () => {
         try {
           const response = await api.get(`/vendedor/${vendedorId}`);
           const { nome, cpf, login, senha, email, telefone } = response.data;
@@ -41,10 +41,10 @@ const vendedorAdd = () => {
           setEmail(email);
           setTelefone(telefone);
         } catch (error) {
-          console.error("Erro ao carregar vendedor:", error);
+          console.error('Erro ao carregar vendedor:', error);
         }
       };
-      fetchvendedor();
+      fetchVendedor();
     }
   }, [vendedorId]);
 
@@ -69,7 +69,7 @@ const vendedorAdd = () => {
       setModalVisible(true);
       resetForm();
     } catch (error) {
-      console.error("Erro ao salvar o vendedor:", error);
+      console.error('Erro ao salvar o vendedor:', error);
       alert('Erro ao salvar o vendedor');
     }
   };
@@ -87,58 +87,60 @@ const vendedorAdd = () => {
     <>
       <CCard>
         <CCardBody>
-          <h4>{vendedorId ? 'Editar vendedor' : 'Adicionar vendedor'}</h4>
+          <h4>{vendedorId ? 'Editar Vendedor' : 'Adicionar Vendedor'}</h4>
           <CForm onSubmit={handleSave}>
             <div className="mb-3">
-              <CFormLabel htmlFor="nomevendedor">Nome do vendedor</CFormLabel>
+              <CFormLabel htmlFor="nomeVendedor">Nome do Vendedor</CFormLabel>
               <CFormInput
                 type="text"
-                id="nomevendedor"
+                id="nomeVendedor"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="cpfvendedor">Cpf</CFormLabel>
+              <CFormLabel htmlFor="cpfVendedor">CPF</CFormLabel>
               <CFormInput
                 type="text"
-                id="cpfvendedor"
+                id="cpfVendedor"
                 value={cpf}
                 onChange={(e) => setCpf(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="emailvendedor">Email</CFormLabel>
+              <CFormLabel htmlFor="emailVendedor">Email</CFormLabel>
               <CFormInput
                 type="email"
-                id="emailvendedor"
+                id="emailVendedor"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="senhavendedor">Senha</CFormLabel>
+              <CFormLabel htmlFor="senhaVendedor">Senha</CFormLabel>
               <CFormInput
                 type="password"
-                id="senhavendedor"
+                id="senhaVendedor"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="telefonevendedor">Telefone</CFormLabel>
+              <CFormLabel htmlFor="telefoneVendedor">Telefone</CFormLabel>
               <CFormInput
                 type="tel"
-                id="telefonevendedor"
+                id="telefoneVendedor"
                 value={telefone}
                 onChange={(e) => setTelefone(e.target.value)}
                 required
               />
             </div>
-            <CButton type="submit" color="primary">Salvar</CButton>
+            <CButton type="submit" color="primary">
+              Salvar
+            </CButton>
           </CForm>
         </CCardBody>
       </CCard>
@@ -148,7 +150,7 @@ const vendedorAdd = () => {
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>
         </CModalHeader>
-        <CModalBody>vendedor salvo com sucesso!</CModalBody>
+        <CModalBody>Vendedor salvo com sucesso!</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={() => setModalVisible(false)}>
             Fechar
@@ -159,4 +161,4 @@ const vendedorAdd = () => {
   );
 };
 
-export default vendedorAdd;
+export default VendedorAdd;

@@ -1,4 +1,5 @@
 import React from 'react'
+import EntregaAdd from './views/entrega/entregaAdd'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -55,14 +56,26 @@ const UsuarioList = React.lazy(() => import('./views/usuario/usuarioList'))
 const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
 const VendedorList = React.lazy(() => import('./views/vendedor/vendedorList'))
 const VendedorAdd = React.lazy(() => import('./views/vendedor/vendedorAdd'))
+const ProdutoList = React.lazy(() => import('./views/produto/produtoList'))
+const ProdutoAdd = React.lazy(() => import('./views/produto/produtoAdd'))
+const CartaoList = React.lazy(() => import('./views/cartao/cartaoList'))
+const CartaoAdd = React.lazy(() => import('./views/cartao/cartaoAdd'))
+const EntregaList = React.lazy(() => import('./views/entrega/entregaList'))
+const EntregaAdd = React.lazy(() => import('./views/entrega/entregaAdd'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/usuario/list', name: 'Usuário List', element: UsuarioList },
   { path: '/usuario/add', name: 'Usuário Add', element: UsuarioAdd },
+  { path: '/entrega/list', name: 'Entrega List', element: EntregaList },
+  { path: '/entrega/add', name: 'Entrega Add', element: EntregaAdd },
+  { path: '/cartao/list', name: 'Cartão List', element: CartaoList},
+  { path: '/cartao/add', name: 'Cartão Add', element: CartaoAdd},
   { path: '/vendedor/add', name: 'Vendedor Add', element: VendedorAdd },
   { path: '/vendedor/list', name: 'Vendedor List', element: VendedorList },
+  { path: '/produto/add', name: 'Produto Add', element: ProdutoAdd },
+  { path: '/produto/list', name: 'Produto List', element: ProdutoList },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
