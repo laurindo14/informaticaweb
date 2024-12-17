@@ -239,6 +239,132 @@ const _nav = [
   },
   {
     component: CNavGroup,
+    name: 'Item Venda',
+    to: '/itemVenda',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/itemVenda/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/itemVenda/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Permissão',
+    to: '/permissao',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/permissao/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/permissao/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Produto',
+    to: '/produto',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/produto/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/produto/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Produto Estoque',
+    to: '/produtoEstoque',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/produtoEstoque/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/produtoEstoque/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Produto Fornecedor',
+    to: '/produtoFornecedor',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/produtoFornecedor/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/produtoFornecedor/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Transportadora',
+    to: '/transportadora',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/transportadora/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/transportadora/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Venda',
+    to: '/venda',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/venda/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/venda/list',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Forms',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [
