@@ -23,51 +23,49 @@ import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const CategoriaList = () => {
+  const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchCategorias = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/categoria');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setCategorias(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar categorias:', error);
+      setCategorias([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchCategorias();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/categoria/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (categoria) => {
+    setCategoriaSelecionada(categoria);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (categoriaSelecionada) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/categoria/${categoriaSelecionada.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setCategoriaSelecionada(null);
+        fetchCategorias(); // Recarrega a lista após a exclusão
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover categoria:', error);
       }
     }
   };
@@ -81,7 +79,7 @@ const ProdutoList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Categorias</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
@@ -89,22 +87,19 @@ const ProdutoList = () => {
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Descrição</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {categorias.map((categoria) => (
+                  <CTableRow key={categoria.id}>
+                    <CTableHeaderCell scope="row">{categoria.id}</CTableHeaderCell>
+                    <CTableDataCell>{categoria.nome}</CTableDataCell>
+                    <CTableDataCell>{categoria.descricao}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(categoria.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +107,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(categoria)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -132,7 +127,7 @@ const ProdutoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover a categoria "<strong>{categoriaSelecionada?.nome}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +142,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default CategoriaList;

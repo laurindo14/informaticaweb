@@ -22,52 +22,52 @@ import {
 import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
+import ProdutoEstoqueChart from './ProdutoEstoqueChart.js';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const ProdutoEstoqueList = () => {
+  const [produtoEstoques, setProdutoEstoques] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [produtoEstoqueSelecionado, setProdutoEstoqueSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchProdutoEstoques = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/produtoEstoque');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setProdutoEstoques(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar produtoEstoques:', error);
+      setProdutoEstoques([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchProdutoEstoques();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/produtoEstoque/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (produtoEstoque) => {
+    setProdutoEstoqueSelecionado(produtoEstoque);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (produtoEstoqueSelecionado) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/produtoEstoque/${produtoEstoqueSelecionado.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setProdutoEstoqueSelecionado(null);
+        // Recarregar todos os produtoEstoques para garantir que a tabela esteja atualizada
+        fetchProdutoEstoques();
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover produtoEstoque:', error);
       }
     }
   };
@@ -78,33 +78,30 @@ const ProdutoList = () => {
 
   return (
     <CRow>
+      <ProdutoEstoqueChart></ProdutoEstoqueChart>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Produto Estoques</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Preço</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {produtoEstoques.map((produtoEstoque) => (
+                  <CTableRow key={produtoEstoque.id}>
+                    <CTableHeaderCell scope="row">{produtoEstoque.id}</CTableHeaderCell>
+                    <CTableDataCell>{produtoEstoque.preco}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(produtoEstoque.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +109,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(produtoEstoque)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -132,7 +129,7 @@ const ProdutoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o produtoEstoque "<strong>{produtoEstoqueSelecionado?.preco}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +144,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default ProdutoEstoqueList;

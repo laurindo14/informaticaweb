@@ -28,16 +28,20 @@ const CartaoList = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [cartaoSelecionado, setCartaoSelecionado] = useState(null);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const fetchCartoes = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const response = await api.get('/cartao'); // Rota de busca de cartões
+      const response = await api.get('/cartao');
       const data = Array.isArray(response.data) ? response.data : [];
       setCartoes(data);
     } catch (error) {
       console.error('Erro ao buscar cartões:', error);
+      setError('Não foi possível carregar os cartões.');
       setCartoes([]);
     } finally {
       setLoading(false);
@@ -63,9 +67,10 @@ const CartaoList = () => {
         await api.delete(`/cartao/${cartaoSelecionado.id}`);
         setModalVisible(false);
         setCartaoSelecionado(null);
-        fetchCartoes(); // Atualiza a lista após exclusão
+        fetchCartoes();
       } catch (error) {
         console.error('Erro ao remover cartão:', error);
+        alert('Erro ao remover o cartão. Tente novamente.');
       }
     }
   };
@@ -74,23 +79,28 @@ const CartaoList = () => {
     return <div>Carregando...</div>;
   }
 
+  if (error) {
+    return <div className="text-danger">{error}</div>;
+  }
+
   return (
     <CRow>
+      {/* Substituir CartaoChart por um componente real ou remover */}
+      {/* <CartaoChart /> */}
+
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Lista de Cartões</strong>
+            <strong>Cartões</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Número do Cartão</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Validade</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Cliente ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">CVC</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -98,11 +108,9 @@ const CartaoList = () => {
                 {cartoes.map((cartao) => (
                   <CTableRow key={cartao.id}>
                     <CTableHeaderCell scope="row">{cartao.id}</CTableHeaderCell>
-                    <CTableDataCell>{cartao.nome}</CTableDataCell>
                     <CTableDataCell>{cartao.numeroCartao}</CTableDataCell>
                     <CTableDataCell>{cartao.validade}</CTableDataCell>
-                    <CTableDataCell>{cartao.cliente_id}</CTableDataCell>
-                    <CTableDataCell>{cartao.cvc}</CTableDataCell>
+                    <CTableDataCell>{cartao.nome}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
@@ -134,7 +142,8 @@ const CartaoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o cartão "<strong>{cartaoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o cartão "
+          <strong>{cartaoSelecionado?.numeroCartao || 'Desconhecido'}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>

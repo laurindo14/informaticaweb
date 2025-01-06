@@ -23,51 +23,49 @@ import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const EnderecoList = () => {
+  const [enderecos, setEnderecos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [enderecoSelecionado, setEnderecoSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchEnderecos = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/endereco');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setEnderecos(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar enderecos:', error);
+      setEnderecos([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchEnderecos();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/endereco/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (endereco) => {
+    setEnderecoSelecionado(endereco);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (enderecoSelecionado) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/endereco/${enderecoSelecionado.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setEnderecoSelecionado(null);
+        fetchEnderecos();
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover endereco:', error);
       }
     }
   };
@@ -81,30 +79,41 @@ const ProdutoList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Endereços</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Logradouro</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Número</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Complemento</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Bairro</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Cidade</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">UF</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">CEP</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Cliente</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {enderecos.map((endereco) => (
+                  <CTableRow key={endereco.id}>
+                    <CTableHeaderCell scope="row">{endereco.id}</CTableHeaderCell>
+                    <CTableDataCell>{endereco.logradouro}</CTableDataCell>
+                    <CTableDataCell>{endereco.numero}</CTableDataCell>
+                    <CTableDataCell>{endereco.complemento}</CTableDataCell>
+                    <CTableDataCell>{endereco.bairro}</CTableDataCell>
+                    <CTableDataCell>{endereco.cidade}</CTableDataCell>
+                    <CTableDataCell>{endereco.uf}</CTableDataCell>
+                    <CTableDataCell>{endereco.cep}</CTableDataCell>
+                    {/* Verifique se endereco.cliente é um objeto ou string */}
+                    <CTableDataCell>{endereco.cliente ? endereco.cliente.nome : 'N/A'}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(endereco.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +121,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(endereco)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -132,7 +141,7 @@ const ProdutoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o endereço "<strong>{enderecoSelecionado?.logradouro}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +156,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default EnderecoList;

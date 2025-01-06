@@ -27,7 +27,7 @@ const UsuarioList = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [usuarioSelecionado, setusuarioSelecionado] = useState(null);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ const UsuarioList = () => {
       const data = Array.isArray(response.data) ? response.data : [];
       setUsuarios(data);
     } catch (error) {
-      console.error('Erro ao buscar usuarios:', error);
+      console.error('Erro ao buscar usuários:', error);
       setUsuarios([]);
     } finally {
       setLoading(false);
@@ -53,7 +53,7 @@ const UsuarioList = () => {
   };
 
   const handleConfirmDelete = (usuario) => {
-    setusuarioSelecionado(usuario);
+    setUsuarioSelecionado(usuario);
     setModalVisible(true);
   };
 
@@ -62,10 +62,11 @@ const UsuarioList = () => {
       try {
         await api.delete(`/usuario/${usuarioSelecionado.id}`);
         setModalVisible(false);
-        setusuarioSelecionado(null);
-        fetchUsuarios(); // Atualiza a lista após exclusão
+        setUsuarioSelecionado(null);
+        // Recarregar todos os usuários para garantir que a tabela esteja atualizada
+        fetchUsuarios();
       } catch (error) {
-        console.error('Erro ao remover usuario:', error);
+        console.error('Erro ao remover usuário:', error);
       }
     }
   };
@@ -86,27 +87,24 @@ const UsuarioList = () => {
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">CPF</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">E-mail</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Login</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">CPF</CTableHeaderCell>
                   <CTableHeaderCell scope="col">RG</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Login</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Telefone</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Permissão</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {usuarios.map((usuario) => (
                   <CTableRow key={usuario.id}>
                     <CTableHeaderCell scope="row">{usuario.id}</CTableHeaderCell>
-                    <CTableDataCell>{usuario.cpf}</CTableDataCell>
-                    <CTableDataCell>{usuario.email}</CTableDataCell>
-                    <CTableDataCell>{usuario.login}</CTableDataCell>
                     <CTableDataCell>{usuario.nome}</CTableDataCell>
+                    <CTableDataCell>{usuario.cpf}</CTableDataCell>
                     <CTableDataCell>{usuario.rg}</CTableDataCell>
+                    <CTableDataCell>{usuario.login}</CTableDataCell>
+                    <CTableDataCell>{usuario.email}</CTableDataCell>
                     <CTableDataCell>{usuario.telefone}</CTableDataCell>
-                    <CTableDataCell>{usuario.permissao?.nome}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"

@@ -16,30 +16,27 @@ import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
 const EntregaAdd = () => {
-  const [nome, setNome] = useState('');
-  const [numeroEntrega, setNumeroEntrega] = useState('');
-  const [validade, setValidade] = useState('');
-  const [clienteId, setClienteId] = useState('');
-  const [cvc, setCvc] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
-
+  const [itemVendaId, setItemVendaId] = useState('');
+  const [quantidade, setQuantidade] = useState('');
+  const [transportadora, setTransportadora] = useState('');
+  const [codigoRastreio, setCodigoRastreio] = useState('');
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const entregaId = searchParams.get('id');
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (entregaId) {
       const fetchEntrega = async () => {
         try {
           const response = await api.get(`/entrega/${entregaId}`);
-          const { nome, numeroEntrega, validade, cliente_id, cvc } = response.data;
-          setNome(nome);
-          setNumeroEntrega(numeroEntrega);
-          setValidade(validade);
-          setClienteId(cliente_id);
-          setCvc(cvc);
+          const {quantidade, transportadora, codigoRastreio } = response.data;
+          setItemVendaId(itemVendaId);
+          setQuantidade(quantidade);
+          setTransportadora(transportadora);
+          setCodigoRastreio(codigoRastreio);
         } catch (error) {
-          console.error("Erro ao carregar entrega:", error);
+          console.error("Erro ao buscar entrega:", error);
         }
       };
       fetchEntrega();
@@ -48,15 +45,12 @@ const EntregaAdd = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
     const entregaData = {
-      nome,
-      numeroEntrega,
-      validade,
-      cliente_id: clienteId,
-      cvc,
+      itemVendaId,
+      quantidade,
+      transportadora,
+      codigoRastreio,
     };
-
     try {
       if (entregaId) {
         await api.put(`/entrega/${entregaId}`, entregaData);
@@ -72,11 +66,10 @@ const EntregaAdd = () => {
   };
 
   const resetForm = () => {
-    setNome('');
-    setNumeroEntrega('');
-    setValidade('');
-    setClienteId('');
-    setCvc('');
+    setItemVendaId('');
+    setQuantidade('');
+    setTransportadora('');
+    setCodigoRastreio('');
   };
 
   return (
@@ -86,51 +79,32 @@ const EntregaAdd = () => {
           <h4>{entregaId ? 'Editar Entrega' : 'Adicionar Entrega'}</h4>
           <CForm onSubmit={handleSave}>
             <div className="mb-3">
-              <CFormLabel htmlFor="nomeEntrega">Nome da Entrega</CFormLabel>
-              <CFormInput
-                type="text"
-                id="nomeEntrega"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="numeroEntrega">Número da Entrega</CFormLabel>
-              <CFormInput
-                type="text"
-                id="numeroEntrega"
-                value={numeroEntrega}
-                onChange={(e) => setNumeroEntrega(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="validadeEntrega">Validade</CFormLabel>
-              <CFormInput
-                type="text"
-                id="validadeEntrega"
-                value={validade}
-                onChange={(e) => setValidade(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="clienteId">Cliente ID</CFormLabel>
+              <CFormLabel htmlFor="quantidade">Quantidade</CFormLabel>
               <CFormInput
                 type="number"
-                id="clienteId"
-                value={clienteId}
-                onChange={(e) => setClienteId(e.target.value)}
+                id="quantidade"
+                value={quantidade}
+                onChange={(e) => setQuantidade(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="cvc">CVC</CFormLabel>
+              <CFormLabel htmlFor="transportadora">Transportadora</CFormLabel>
               <CFormInput
                 type="text"
-                id="cvc"
-                value={cvc}
-                onChange={(e) => setCvc(e.target.value)}
+                id="transportadora"
+                value={transportadora}
+                onChange={(e) => setTransportadora(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <CFormLabel htmlFor="codigoRastreio">Código de Rastreio</CFormLabel>
+              <CFormInput
+                type="text"
+                id="codigoRastreio"
+                value={codigoRastreio}
+                onChange={(e) => setCodigoRastreio(e.target.value)}
                 required
               />
             </div>
@@ -139,7 +113,6 @@ const EntregaAdd = () => {
         </CCardBody>
       </CCard>
 
-      {/* Modal de Confirmação */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>

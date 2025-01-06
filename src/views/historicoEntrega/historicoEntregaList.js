@@ -22,52 +22,52 @@ import {
 import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
+import HistoricoEntregaChart from './HistoricoEntregaChart.js';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const HistoricoEntregaList = () => {
+  const [historicoEntregas, setHistoricoEntregas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [historicoEntregaSelecionado, setHistoricoEntregaSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchHistoricoEntregas = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/historicoEntrega');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setHistoricoEntregas(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar histórico de entregas:', error);
+      setHistoricoEntregas([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchHistoricoEntregas();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/historicoEntrega/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (historicoEntrega) => {
+    setHistoricoEntregaSelecionado(historicoEntrega);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (historicoEntregaSelecionado) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/historicoEntrega/${historicoEntregaSelecionado.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setHistoricoEntregaSelecionado(null);
+        // Recarregar todos os históricos de entregas para garantir que a tabela esteja atualizada
+        fetchHistoricoEntregas();
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover histórico de entrega:', error);
       }
     }
   };
@@ -78,33 +78,32 @@ const ProdutoList = () => {
 
   return (
     <CRow>
+      <HistoricoEntregaChart></HistoricoEntregaChart>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Históricos de Entrega</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Data e Hora</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Mensagem</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {historicoEntregas.map((historicoEntrega) => (
+                  <CTableRow key={historicoEntrega.id}>
+                    <CTableHeaderCell scope="row">{historicoEntrega.id}</CTableHeaderCell>
+                    <CTableDataCell>{historicoEntrega.dataHora}</CTableDataCell>
+                    <CTableDataCell>{historicoEntrega.mensagem}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(historicoEntrega.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +111,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(historicoEntrega)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -132,7 +131,7 @@ const ProdutoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o histórico de entrega "<strong>{historicoEntregaSelecionado?.dataHora}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +146,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default HistoricoEntregaList;

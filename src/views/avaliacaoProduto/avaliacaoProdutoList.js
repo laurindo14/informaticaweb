@@ -22,52 +22,52 @@ import {
 import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
+import AvaliacaoProdutoChart from './AvaliacaoProdutoChart.js';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const AvaliacaoProdutoList = () => {
+  const [avaliacoesProduto, setAvaliacoesProduto] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [avaliacaoProdutoSelecionada, setAvaliacaoProdutoSelecionada] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchAvaliacoesProduto = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/avaliacaoProduto');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setAvaliacoesProduto(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar avaliacoesProduto:', error);
+      setAvaliacoesProduto([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchAvaliacoesProduto();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/avaliacaoProduto/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (avaliacaoProduto) => {
+    setAvaliacaoProdutoSelecionada(avaliacaoProduto);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (avaliacaoProdutoSelecionada) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/avaliacaoProduto/${avaliacaoProdutoSelecionada.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setAvaliacaoProdutoSelecionada(null);
+        // Recarregar todas as avaliacoesProduto para garantir que a tabela esteja atualizada
+        fetchAvaliacoesProduto();
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover avaliacaoProduto:', error);
       }
     }
   };
@@ -78,33 +78,32 @@ const ProdutoList = () => {
 
   return (
     <CRow>
+      <AvaliacaoProdutoChart></AvaliacaoProdutoChart>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Avaliações de Produto</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Nota</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Descrição</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {avaliacoesProduto.map((avaliacaoProduto) => (
+                  <CTableRow key={avaliacaoProduto.id}>
+                    <CTableHeaderCell scope="row">{avaliacaoProduto.id}</CTableHeaderCell>
+                    <CTableDataCell>{avaliacaoProduto.nota}</CTableDataCell>
+                    <CTableDataCell>{avaliacaoProduto.descricao}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(avaliacaoProduto.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +111,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(avaliacaoProduto)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -132,7 +131,7 @@ const ProdutoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover a avaliação de produto "<strong>{avaliacaoProdutoSelecionada?.descricao}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +146,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default AvaliacaoProdutoList;

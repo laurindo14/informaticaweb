@@ -22,52 +22,52 @@ import {
 import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
+import PermissaoChart from './PermissaoChart.js';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const PermissaoList = () => {
+  const [permissoes, setPermissoes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [permissaoSelecionada, setPermissaoSelecionada] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchPermissoes = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/permissao');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setPermissoes(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar permissões:', error);
+      setPermissoes([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchPermissoes();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/permissao/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (permissao) => {
+    setPermissaoSelecionada(permissao);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (permissaoSelecionada) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/permissao/${permissaoSelecionada.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setPermissaoSelecionada(null);
+        // Recarregar todas as permissões para garantir que a tabela esteja atualizada
+        fetchPermissoes();
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover permissão:', error);
       }
     }
   };
@@ -78,10 +78,11 @@ const ProdutoList = () => {
 
   return (
     <CRow>
+      <PermissaoChart></PermissaoChart>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Permissões</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
@@ -89,22 +90,18 @@ const ProdutoList = () => {
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {permissoes.map((permissao) => (
+                  <CTableRow key={permissao.id}>
+                    <CTableHeaderCell scope="row">{permissao.id}</CTableHeaderCell>
+                    <CTableDataCell>{permissao.nome}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(permissao.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +109,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(permissao)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -132,7 +129,7 @@ const ProdutoList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover a permissão "<strong>{permissaoSelecionada?.nome}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +144,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default PermissaoList;

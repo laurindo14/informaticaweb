@@ -16,15 +16,17 @@ import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
 const UsuarioAdd = () => {
-  const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [rg, setRg] = useState('');
-  const [login, setLogin] = useState('');
-  const [senha, setSenha] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
+  const [usuarioData, setUsuarioData] = useState({
+    nome: '',
+    cpf: '',
+    rg: '',
+    login: '',
+    senha: '',
+    email: '',
+    telefone: '',
+    permissao: '', // Se for um campo relacionado a permissões, garanta que a estrutura está correta
+  });
   const [modalVisible, setModalVisible] = useState(false);
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const usuarioId = searchParams.get('id');
@@ -34,145 +36,107 @@ const UsuarioAdd = () => {
       const fetchUsuario = async () => {
         try {
           const response = await api.get(`/usuario/${usuarioId}`);
-          const { nome, cpf, rg, login, senha, email, telefone } = response.data;
-          setNome(nome);
-          setCpf(cpf);
-          setRg(rg);
-          setLogin(login);
-          setSenha(senha);
-          setEmail(email);
-          setTelefone(telefone);
+          setUsuarioData({
+            nome: response.data.nome,
+            cpf: response.data.cpf,
+            rg: response.data.rg,
+            login: response.data.login,
+            senha: response.data.senha,
+            email: response.data.email,
+            telefone: response.data.telefone,
+            permissao: response.data.permissao ? response.data.permissao.id : '',
+          });
         } catch (error) {
-          console.error("Erro ao carregar usuario:", error);
+          console.error('Erro ao carregar usuário:', error);
         }
       };
       fetchUsuario();
     }
   }, [usuarioId]);
 
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setUsuarioData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
 
-    const usuarioData = {
-      nome,
-      cpf,
-      rg,
-      login,
-      senha,
-      email,
-      telefone,
-    };
-
     try {
+      let response;
       if (usuarioId) {
-        await api.put(`/usuario/${usuarioId}`, usuarioData);
+        // Atualiza o usuário
+        response = await api.put(`/usuario/${usuarioId}`, usuarioData);
       } else {
-        await api.post('/usuario', usuarioData);
+        // Cria um novo usuário
+        response = await api.post('/usuario', usuarioData);
       }
+
+      console.log('Resposta da API:', response.data);  // Log de sucesso
+
       setModalVisible(true);
       resetForm();
     } catch (error) {
-      console.error("Erro ao salvar o usuario:", error);
-      alert('Erro ao salvar o usuario');
+      console.error('Erro ao salvar o usuário:', error.response || error);
+      alert(`Erro ao salvar o usuário: ${error.response?.data?.message || error.message}`);
     }
   };
 
   const resetForm = () => {
-    setNome('');
-    setCpf('');
-    setRg('');
-    setLogin('');
-    setSenha('');
-    setEmail('');
-    setTelefone('');
+    setUsuarioData({
+      nome: '',
+      cpf: '',
+      rg: '',
+      login: '',
+      senha: '',
+      email: '',
+      telefone: '',
+      permissao: '',
+    });
   };
 
   return (
     <>
       <CCard>
         <CCardBody>
-          <h4>{usuarioId ? 'Editar Usuario' : 'Adicionar Usuario'}</h4>
+          <h4>{usuarioId ? 'Editar Usuário' : 'Adicionar Usuário'}</h4>
           <CForm onSubmit={handleSave}>
-            <div className="mb-3">
-              <CFormLabel htmlFor="nomeUsuario">Nome do Usuario</CFormLabel>
-              <CFormInput
-                type="text"
-                id="nomeUsuario"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="cpfUsuario">Cpf</CFormLabel>
-              <CFormInput
-                type="text"
-                id="cpfUsuario"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="rgUsuario">Rg</CFormLabel>
-              <CFormInput
-                type="text"
-                id="rgUsuario"
-                value={rg}
-                onChange={(e) => setRg(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="loginUsuario">Login</CFormLabel>
-              <CFormInput
-                type="text"
-                id="loginUsuario"
-                value={login}
-                onChange={(e) => setLogin(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="senhaUsuario">Senha</CFormLabel>
-              <CFormInput
-                type="password"
-                id="senhaUsuario"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="emailUsuario">Email</CFormLabel>
-              <CFormInput
-                type="email"
-                id="emailUsuario"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="telefoneUsuario">Telefone</CFormLabel>
-              <CFormInput
-                type="tel"
-                id="telefoneUsuario"
-                value={telefone}
-                onChange={(e) => setTelefone(e.target.value)}
-                required
-              />
-            </div>
-            <CButton type="submit" color="primary">Salvar</CButton>
+            {[
+              { label: 'Nome', id: 'nome', type: 'text', required: true },
+              { label: 'CPF', id: 'cpf', type: 'text', required: true },
+              { label: 'RG', id: 'rg', type: 'text' },
+              { label: 'Login', id: 'login', type: 'text', required: true },
+              { label: 'Senha', id: 'senha', type: 'password', required: true },
+              { label: 'E-mail', id: 'email', type: 'email' },
+              { label: 'Telefone', id: 'telefone', type: 'text' },
+            ].map(({ label, id, type, required }) => (
+              <div className="mb-3" key={id}>
+                <CFormLabel htmlFor={`${id}Usuario`}>{label}</CFormLabel>
+                <CFormInput
+                  type={type}
+                  id={id}
+                  value={usuarioData[id]}
+                  onChange={handleChange}
+                  required={required}
+                />
+              </div>
+            ))}
+
+            <CButton type="submit" color="primary">
+              Salvar
+            </CButton>
           </CForm>
         </CCardBody>
       </CCard>
 
-      {/* Modal de Confirmação */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>
         </CModalHeader>
-        <CModalBody>Usuario salvo com sucesso!</CModalBody>
+        <CModalBody>Usuário salvo com sucesso!</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={() => setModalVisible(false)}>
             Fechar

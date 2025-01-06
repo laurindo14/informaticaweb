@@ -16,30 +16,27 @@ import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
 const CartaoAdd = () => {
-  const [nome, setNome] = useState('');
   const [numeroCartao, setNumeroCartao] = useState('');
   const [validade, setValidade] = useState('');
-  const [clienteId, setClienteId] = useState('');
-  const [cvc, setCvc] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
-
+  const [nome, setNome] = useState('');
+  const [clienteId, setClienteId] = useState(''); // Ajustado o nome do campo
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const cartaoId = searchParams.get('id');
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (cartaoId) {
       const fetchCartao = async () => {
         try {
           const response = await api.get(`/cartao/${cartaoId}`);
-          const { nome, numeroCartao, validade, cliente_id, cvc } = response.data;
-          setNome(nome);
+          const { numeroCartao, validade, nome, clienteId } = response.data; // Certifique-se de que "clienteId" existe na API
           setNumeroCartao(numeroCartao);
           setValidade(validade);
-          setClienteId(cliente_id);
-          setCvc(cvc);
+          setNome(nome);
+          setClienteId(clienteId || ''); // Prevenir valores nulos/undefined
         } catch (error) {
-          console.error("Erro ao carregar cartão:", error);
+          console.error("Erro ao buscar cartão:", error);
         }
       };
       fetchCartao();
@@ -49,12 +46,17 @@ const CartaoAdd = () => {
   const handleSave = async (e) => {
     e.preventDefault();
 
+    // Validar dados antes do envio
+    if (!numeroCartao || !validade || !nome || !clienteId) {
+      alert('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
     const cartaoData = {
-      nome,
       numeroCartao,
       validade,
-      cliente_id: clienteId,
-      cvc,
+      nome,
+      clienteId, // Certifique-se de que este campo é esperado pela API
     };
 
     try {
@@ -67,16 +69,15 @@ const CartaoAdd = () => {
       resetForm();
     } catch (error) {
       console.error("Erro ao salvar o cartão:", error);
-      alert('Erro ao salvar o cartão');
+      alert('Erro ao salvar o cartão. Verifique os dados enviados.');
     }
   };
 
   const resetForm = () => {
-    setNome('');
     setNumeroCartao('');
     setValidade('');
+    setNome('');
     setClienteId('');
-    setCvc('');
   };
 
   return (
@@ -85,16 +86,6 @@ const CartaoAdd = () => {
         <CCardBody>
           <h4>{cartaoId ? 'Editar Cartão' : 'Adicionar Cartão'}</h4>
           <CForm onSubmit={handleSave}>
-            <div className="mb-3">
-              <CFormLabel htmlFor="nomeCartao">Nome do Cartão</CFormLabel>
-              <CFormInput
-                type="text"
-                id="nomeCartao"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                required
-              />
-            </div>
             <div className="mb-3">
               <CFormLabel htmlFor="numeroCartao">Número do Cartão</CFormLabel>
               <CFormInput
@@ -106,31 +97,32 @@ const CartaoAdd = () => {
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="validadeCartao">Validade</CFormLabel>
+              <CFormLabel htmlFor="validadeCartao">Validade (MM/AAAA)</CFormLabel>
               <CFormInput
                 type="text"
                 id="validadeCartao"
                 value={validade}
                 onChange={(e) => setValidade(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="clienteId">Cliente ID</CFormLabel>
-              <CFormInput
-                type="number"
-                id="clienteId"
-                value={clienteId}
-                onChange={(e) => setClienteId(e.target.value)}
                 required
               />
             </div>
             <div className="mb-3">
-              <CFormLabel htmlFor="cvc">CVC</CFormLabel>
+              <CFormLabel htmlFor="nomeCartao">Nome</CFormLabel>
               <CFormInput
                 type="text"
-                id="cvc"
-                value={cvc}
-                onChange={(e) => setCvc(e.target.value)}
+                id="nomeCartao"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <CFormLabel htmlFor="clienteId">Cliente</CFormLabel>
+              <CFormInput
+                type="text"
+                id="clienteId"
+                value={clienteId}
+                onChange={(e) => setClienteId(e.target.value)}
                 required
               />
             </div>
@@ -139,7 +131,6 @@ const CartaoAdd = () => {
         </CCardBody>
       </CCard>
 
-      {/* Modal de Confirmação */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>

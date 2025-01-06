@@ -23,49 +23,50 @@ import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
 
-const VendedorList = () => {
-  const [vendedores, setVendedores] = useState([]);
+const ClienteList = () => {
+  const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [vendedorSelecionado, setVendedorSelecionado] = useState(null);
+  const [clienteSelecionado, setClienteSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchVendedores = async () => {
+  const fetchClientes = async () => {
     try {
-      const response = await api.get('/vendedor');
+      const response = await api.get('/cliente');
       const data = Array.isArray(response.data) ? response.data : [];
-      setVendedores(data);
+      setClientes(data);
     } catch (error) {
-      console.error('Erro ao buscar vendedores:', error);
-      setVendedores([]);
+      console.error('Erro ao buscar clientes:', error);
+      setClientes([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchVendedores();
+    fetchClientes();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/vendedor/add?id=${id}`);
+    navigate(`/cliente/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (vendedor) => {
-    setVendedorSelecionado(vendedor);
+  const handleConfirmDelete = (cliente) => {
+    setClienteSelecionado(cliente);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (vendedorSelecionado) {
+    if (clienteSelecionado) {
       try {
-        await api.delete(`/vendedor/${vendedorSelecionado.id}`);
+        await api.delete(`/cliente/${clienteSelecionado.id}`);
         setModalVisible(false);
-        setVendedorSelecionado(null);
-        fetchVendedores(); // Atualiza a lista após exclusão
+        setClienteSelecionado(null);
+        // Recarregar todos os clientes para garantir que a tabela esteja atualizada
+        fetchClientes();
       } catch (error) {
-        console.error('Erro ao remover vendedor:', error);
+        console.error('Erro ao remover cliente:', error);
       }
     }
   };
@@ -79,36 +80,38 @@ const VendedorList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Vendedores</strong>
+            <strong>Clientes</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">CPF</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">E-mail</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Login</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">CPF</CTableHeaderCell>
                   <CTableHeaderCell scope="col">RG</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Login</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Senha</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Telefone</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {vendedores.map((vendedor) => (
-                  <CTableRow key={vendedor.id}>
-                    <CTableHeaderCell scope="row">{vendedor.id}</CTableHeaderCell>
-                    <CTableDataCell>{vendedor.cpf}</CTableDataCell>
-                    <CTableDataCell>{vendedor.email}</CTableDataCell>
-                    <CTableDataCell>{vendedor.login}</CTableDataCell>
-                    <CTableDataCell>{vendedor.nome}</CTableDataCell>
-                    <CTableDataCell>{vendedor.rg}</CTableDataCell>
-                    <CTableDataCell>{vendedor.telefone}</CTableDataCell>
+                {clientes.map((cliente) => (
+                  <CTableRow key={cliente.id}>
+                    <CTableHeaderCell scope="row">{cliente.id}</CTableHeaderCell>
+                    <CTableDataCell>{cliente.nome}</CTableDataCell>
+                    <CTableDataCell>{cliente.cpf}</CTableDataCell>
+                    <CTableDataCell>{cliente.rg}</CTableDataCell>
+                    <CTableDataCell>{cliente.login}</CTableDataCell>
+                    <CTableDataCell>{cliente.senha}</CTableDataCell>
+                    <CTableDataCell>{cliente.email}</CTableDataCell>
+                    <CTableDataCell>{cliente.telefone}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(vendedor.id)}
+                        onClick={() => handleEdit(cliente.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -116,7 +119,7 @@ const VendedorList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(vendedor)}
+                        onClick={() => handleConfirmDelete(cliente)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -136,7 +139,7 @@ const VendedorList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o vendedor "<strong>{vendedorSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o cliente "<strong>{clienteSelecionado?.nome}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -151,4 +154,4 @@ const VendedorList = () => {
   );
 };
 
-export default VendedorList;
+export default ClienteList;

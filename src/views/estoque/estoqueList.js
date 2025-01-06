@@ -23,51 +23,49 @@ import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
 
-
-const ProdutoList = () => {
-  const [produtos, setProdutos] = useState([]);
+const EstoqueList = () => {
+  const [estoques, setEstoques] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+  const [estoqueSelecionado, setEstoqueSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutos = async () => {
+  const fetchEstoques = async () => {
     try {
-      const response = await api.get('/produto');
+      const response = await api.get('/estoque');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutos(data);
+      setEstoques(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      setProdutos([]);
+      console.error('Erro ao buscar estoques:', error);
+      setEstoques([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
+    fetchEstoques();
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/produto/add?id=${id}`);
+    navigate(`/estoque/add?id=${id}`);
   };
 
-  const handleConfirmDelete = (produto) => {
-    setProdutoSelecionado(produto);
+  const handleConfirmDelete = (estoque) => {
+    setEstoqueSelecionado(estoque);
     setModalVisible(true);
   };
 
   const handleDelete = async () => {
-    if (produtoSelecionado) {
+    if (estoqueSelecionado) {
       try {
-        await api.delete(`/produto/${produtoSelecionado.id}`);
+        await api.delete(`/estoque/${estoqueSelecionado.id}`);
         setModalVisible(false);
-        setProdutoSelecionado(null);
-        // Recarregar todos os produtos para garantir que a tabela esteja atualizada
-        fetchProdutos();
+        setEstoqueSelecionado(null);
+        fetchEstoques();
       } catch (error) {
-        console.error('Erro ao remover produto:', error);
+        console.error('Erro ao remover estoque:', error);
       }
     }
   };
@@ -81,30 +79,38 @@ const ProdutoList = () => {
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Produtos</strong>
+            <strong>Estoques</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Ficha Técnica</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Logradouro</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Numero</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Complemento</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Bairro</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Cidade</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">UF</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">CEP</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtos.map((produto) => (
-                  <CTableRow key={produto.id}>
-                    <CTableHeaderCell scope="row">{produto.id}</CTableHeaderCell>
-                    <CTableDataCell>{produto.nome}</CTableDataCell>
-                    <CTableDataCell>{produto.fichaTecnica}</CTableDataCell>
-                    <CTableDataCell>{produto.estoque}</CTableDataCell>
+                {estoques.map((estoque) => (
+                  <CTableRow key={estoque.id}>
+                    <CTableHeaderCell scope="row">{estoque.id}</CTableHeaderCell>
+                    <CTableDataCell>{estoque.logradouro}</CTableDataCell>
+                    <CTableDataCell>{estoque.numero}</CTableDataCell>
+                    <CTableDataCell>{estoque.complemento}</CTableDataCell>
+                    <CTableDataCell>{estoque.bairro}</CTableDataCell>
+                    <CTableDataCell>{estoque.cidade}</CTableDataCell>
+                    <CTableDataCell>{estoque.uf}</CTableDataCell>
+                    <CTableDataCell>{estoque.cep}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
-                        onClick={() => handleEdit(produto.id)}
+                        onClick={() => handleEdit(estoque.id)}
                         className="me-2"
                         style={{ color: 'white' }}
                       >
@@ -112,7 +118,7 @@ const ProdutoList = () => {
                       </CButton>
                       <CButton
                         color="danger"
-                        onClick={() => handleConfirmDelete(produto)}
+                        onClick={() => handleConfirmDelete(estoque)}
                         style={{ color: 'white' }}
                       >
                         <CIcon icon={cilTrash} /> Remover
@@ -126,13 +132,12 @@ const ProdutoList = () => {
         </CCard>
       </CCol>
 
-      {/* Modal de Confirmação de Exclusão */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto "<strong>{produtoSelecionado?.nome}</strong>"?
+          Tem certeza de que deseja remover o estoque "<strong>{estoqueSelecionado?.logradouro}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
@@ -147,4 +152,4 @@ const ProdutoList = () => {
   );
 };
 
-export default ProdutoList;
+export default EstoqueList;

@@ -22,6 +22,7 @@ import {
 import { cilPencil, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
+import EntregaChart from './EntregaChart.js';
 
 const EntregaList = () => {
   const [entregas, setEntregas] = useState([]);
@@ -33,7 +34,7 @@ const EntregaList = () => {
 
   const fetchEntregas = async () => {
     try {
-      const response = await api.get('/entrega'); // Rota de busca de entregas
+      const response = await api.get('/entrega');
       const data = Array.isArray(response.data) ? response.data : [];
       setEntregas(data);
     } catch (error) {
@@ -63,7 +64,8 @@ const EntregaList = () => {
         await api.delete(`/entrega/${entregaSelecionada.id}`);
         setModalVisible(false);
         setEntregaSelecionada(null);
-        fetchEntregas(); // Atualiza a lista após exclusão
+        // Recarregar todos os entregas para garantir que a tabela esteja atualizada
+        fetchEntregas();
       } catch (error) {
         console.error('Erro ao remover entrega:', error);
       }
@@ -76,21 +78,19 @@ const EntregaList = () => {
 
   return (
     <CRow>
+      <EntregaChart></EntregaChart>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Lista de Entregas</strong>
+            <strong>Entregas</strong>
           </CCardHeader>
           <CCardBody>
             <CTable hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Número da Entrega</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Validade</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Cliente ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">CVC</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Quantidade</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Código de Rastreamento</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -98,11 +98,8 @@ const EntregaList = () => {
                 {entregas.map((entrega) => (
                   <CTableRow key={entrega.id}>
                     <CTableHeaderCell scope="row">{entrega.id}</CTableHeaderCell>
-                    <CTableDataCell>{entrega.nome}</CTableDataCell>
-                    <CTableDataCell>{entrega.numeroEntrega}</CTableDataCell>
-                    <CTableDataCell>{entrega.validade}</CTableDataCell>
-                    <CTableDataCell>{entrega.cliente_id}</CTableDataCell>
-                    <CTableDataCell>{entrega.cvc}</CTableDataCell>
+                    <CTableDataCell>{entrega.quantidade}</CTableDataCell>
+                    <CTableDataCell>{entrega.codigoRastreio}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"
@@ -134,7 +131,7 @@ const EntregaList = () => {
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover a entrega "<strong>{entregaSelecionada?.nome}</strong>"?
+          Tem certeza de que deseja remover a entrega "<strong>{entregaSelecionada?.quantidade}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>
