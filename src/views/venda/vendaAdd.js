@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   CButton,
   CCard,
@@ -11,119 +11,120 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CFormSelect,
+  CSpinner,
 } from '@coreui/react';
 import api from '../../services/axiosConfig';
-import { useLocation } from 'react-router-dom';
 
 const VendaAdd = () => {
-  const [data, setData] = useState('');
+  const [dataVenda, setDataVenda] = useState('');
   const [clienteId, setClienteId] = useState('');
-  const [endereco, setEnderecoEntrega] = useState('');
-  const [vendaPai, setVendaPai] = useState(''); // Referência para a venda pai
-  const [vendas, setVendas] = useState([]);
+  const [objeto, setObjeto] = useState('');
+  const [quantidade, setQuantidade] = useState('');
+  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const location = useLocation();
-
-  const searchParams = new URLSearchParams(location.search);
-  const vendaId = searchParams.get('id');
-
-  useEffect(() => {
-    const fetchVendas = async () => {
-      try {
-        const response = await api.get('/venda');
-        setVendas(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar vendas:', error);
-      }
-    };
-    fetchVendas();
-  }, []);
-
-  useEffect(() => {
-    if (vendaId) {
-      const fetchVenda = async () => {
-        try {
-          const response = await api.get(`/venda/${vendaId}`);
-          const { data, cliente, entrega, parent } = response.data;
-          setData(data);
-          setClienteId(clienteId );
-          setEntregaId(entregaId);
-          setVendaPai(vendaPai);
-        } catch (error) {
-          console.error('Erro ao carregar venda:', error);
-        }
-      };
-      fetchVenda();
-    }
-  }, [vendaId]);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSave = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMessage('');
+    setSuccessMessage('');
 
     const vendaData = {
-      data,
-      cliente: cliente ? { id: cliente } : null,
-      entrega: entrega ? { id: entrega } : null,
-      vendaPai: vendaPai ? { id: vendaPai } : null,
+      dataVenda,
+      clienteId,
+      objeto,
+      quantidade,
     };
 
     try {
-      if (vendaId) {
-        await api.put(`/venda/${vendaId}`, vendaData);
-      } else {
-        await api.post('/venda', vendaData);
-      }
-      setModalVisible(true);
+      await api.post('/venda', vendaData);
+      setSuccessMessage('Venda cadastrada com sucesso!');
       resetForm();
+      setModalVisible(true);
     } catch (error) {
       console.error('Erro ao salvar a venda:', error);
-      alert('Erro ao salvar a venda');
+      setErrorMessage('Erro ao salvar a venda. Verifique os dados e tente novamente.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const resetForm = () => {
-    setData('');
+    setDataVenda('');
     setClienteId('');
-    setEntregaId('');
-    setVendaPai('');
+    setObjeto('');
+    setQuantidade('');
   };
 
   return (
     <>
       <CCard>
         <CCardBody>
-          <h4>{vendaId ? 'Editar Venda' : 'Adicionar Venda'}</h4>
-          <CForm onSubmit={handleSave}>
-            <div className="mb-3">
-              <CFormLabel htmlFor="dataVenda">Data</CFormLabel>
-              <CFormInput
-                type="date"
-                id="dataVenda"
-                value={data}
-                onChange={(e) => setData(e.target.value)}
-                required
-              />
+          <h4>Adicionar Venda de Objeto</h4>
+
+          {loading && (
+            <div className="text-center mb-3">
+              <CSpinner color="primary" /> Salvando...
             </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="VendaPai">Venda Pai</CFormLabel>
-              <CFormSelect
-                id="VendaPai"
-                value={parent}
-                onChange={(e) => setVendaPai(e.target.value)}
-              >
-                <option value="">Selecione a Venda </option>
-                {Vendas.map((venda) => (
-                  <option key={venda.id} value={venda.id}>
-                    {venda.nome}
-                  </option>
-                ))}
-              </CFormSelect>
-            </div>
-            <CButton type="submit" color="primary">
-              Salvar
-            </CButton>
-          </CForm>
+          )}
+
+          {!loading && (
+            <CForm onSubmit={handleSave}>
+              <div className="mb-3">
+                <CFormLabel htmlFor="dataVenda">Data da Venda</CFormLabel>
+                <CFormInput
+                  type="date"
+                  id="dataVenda"
+                  value={dataVenda}
+                  onChange={(e) => setDataVenda(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <CFormLabel htmlFor="clienteId">Cliente ID</CFormLabel>
+                <CFormInput
+                  type="text"
+                  id="clienteId"
+                  value={clienteId}
+                  onChange={(e) => setClienteId(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <CFormLabel htmlFor="objeto">Objeto Vendido</CFormLabel>
+                <CFormInput
+                  type="text"
+                  id="objeto"
+                  value={objeto}
+                  onChange={(e) => setObjeto(e.target.value)}
+                  placeholder="Ex: Notebook, Smartphone"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <CFormLabel htmlFor="quantidade">Quantidade</CFormLabel>
+                <CFormInput
+                  type="number"
+                  id="quantidade"
+                  value={quantidade}
+                  onChange={(e) => setQuantidade(e.target.value)}
+                  min="1"
+                  required
+                />
+              </div>
+
+              <CButton type="submit" color="primary" disabled={loading}>
+                {loading ? 'Salvando...' : 'Salvar'}
+              </CButton>
+            </CForm>
+          )}
+
+          {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
         </CCardBody>
       </CCard>
 
@@ -131,7 +132,7 @@ const VendaAdd = () => {
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>
         </CModalHeader>
-        <CModalBody>Venda salva com sucesso!</CModalBody>
+        <CModalBody>{successMessage}</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={() => setModalVisible(false)}>
             Fechar

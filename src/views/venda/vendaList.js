@@ -88,6 +88,9 @@ const VendaList = () => {
                 <CTableRow>
                   <CTableHeaderCell scope="col">ID</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Data</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Cliente ID</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Endereço de Entrega ID</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -95,6 +98,8 @@ const VendaList = () => {
                   <CTableRow key={venda.id}>
                     <CTableHeaderCell scope="row">{venda.id}</CTableHeaderCell>
                     <CTableDataCell>{venda.data}</CTableDataCell>
+                    <CTableDataCell>{venda.cliente_id}</CTableDataCell>
+                    <CTableDataCell>{venda.enderecoEntrega_id}</CTableDataCell>
                     <CTableDataCell>
                       <CButton
                         color="warning"

@@ -51,6 +51,8 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
+const FluxoFinanceiroList = React.lazy(() => import('./views/fluxoFinanceiro/FluxoFinanceiroList'))
+const FluxoFinanceiroAdd = React.lazy(() => import('./views/fluxoFinanceiro/FluxoFinanceiroAdd'))
 const ClienteAdd = React.lazy(() => import('./views/cliente/ClienteAdd'));
 const ClienteList = React.lazy(() => import('./views/cliente/ClienteList'));
 const AvaliacaoProdutoAdd = React.lazy(() => import('./views/avaliacaoProduto/avaliacaoProdutoAdd'))
@@ -83,8 +85,8 @@ const TransportadoraAdd = React.lazy(() => import('./views/transportadora/transp
 const TranspostadoraList = React.lazy(() => import('./views/transportadora/transportadoraList'))
 const UsuarioList = React.lazy(() => import('./views/usuario/usuarioList'))
 const UsuarioAdd = React.lazy(() => import('./views/usuario/usuarioAdd'))
-const VendaAdd = React.lazy(() => import('./views/venda/vendaAdd'))
 const VendaList = React.lazy(() => import('./views/venda/vendaList'))
+const VendaAdd = React.lazy(() => import('./views/venda/vendaAdd'))
 
 
 
@@ -96,9 +98,13 @@ const routes = [
   { path: '/avaliacaoProduto/list', name: 'Avaliação Produto List', element: AvaliacaoProdutoList },
   { path: '/avaliacaoProduto/add', name: 'Usuário Produto Add', element: AvaliacaoProdutoAdd },
   { path: '/cartao/list', name: 'Cartão List', element: CartaoList },
+  { path: '/FluxoFinanceiro/add', name: 'Adicionar Fluxo', element: FluxoFinanceiroAdd },
+  { path: '/FluxoFinanceiro/list', name: 'Listar Fluxo', element: FluxoFinanceiroList },
   { path: '/cartao/add', name: 'Cartão Add', element: CartaoAdd },
   { path: '/cliente/add', name: 'Adicionar Cliente', element: ClienteAdd },
   { path: '/cliente/list', name: 'Listar Clientes', element: ClienteList },
+  { path: '/venda/add', name: 'Adicionar Vendas', element: VendaAdd },
+  { path: '/venda/list', name: 'Listar Vendas', element: VendaList },
   { path: '/categoria/list', name: 'Categoria List', element: CategoriaList },
   { path: '/categoria/add', name: 'Categoria Add', element: CategoriaAdd },
   { path: '/endereco/list', name: 'Endereço List', element: EnderecoList },
@@ -111,8 +117,6 @@ const routes = [
   { path: '/historicoEntrega/add', name: 'Hitorico Entrega Add', element: HistoricoEntregaAdd },
   { path: '/imagemProduto/list', name: 'Imagem Produto List', element: ImagemProdutoList },
   { path: '/imagemProduto/add', name: 'Imagem Produto Add', element: ImagemProdutoAdd },
-  { path: '/itemVenda/list', name: 'Item Venda List', element: ItemVendaList },
-  { path: '/itemVenda/add', name: 'Item Venda Add', element: ItemVendaAdd },
   { path: '/permissao/list', name: 'Permissão List', element: PermissaoList},
   { path: '/permissao/add', name: 'Permissão Add', element: PermissaoAdd },
   { path: '/produto/list', name: 'Produto List', element: ProdutoList },
@@ -125,8 +129,6 @@ const routes = [
   { path: '/transportadora/add', name: 'Transportadora Add', element: TransportadoraAdd },
   { path: '/usuario/list', name: 'Usuário List', element: UsuarioList },
   { path: '/usuario/add', name: 'Usuário Add', element: UsuarioAdd },
-  { path: '/venda/list', name: 'Venda List', element: VendaList },
-  { path: '/venda/add', name: 'Venda Add', element: VendaAdd },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },

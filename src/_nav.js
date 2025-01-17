@@ -115,6 +115,24 @@ const _nav = [
       }
     ],
   },
+  {
+    component: CNavGroup,
+    name: 'Fluxo Financeiro ',
+    to: '/FluxoFinanceiro',
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/FluxoFinanceiro/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/FluxoFinanceiro/list',
+      }
+    ],
+  },
   
 
   
